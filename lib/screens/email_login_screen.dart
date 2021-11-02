@@ -124,22 +124,14 @@ class _EmailLoginState extends State<EmailLogin> {
                         final user = await _auth.signInWithEmailAndPassword(
                             email: email.toString(),
                             password: password.toString());
-
                         setState(() {
                           showSpinner = false;
                         });
-
                         if (user != null) {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => HomeScreen()));
-                        } else {
-                          setState(() {
-                            showSpinner = false;
-                          });
-                          // Scaffold.of(context).showSnackBar(
-                          //     new SnackBar(content: new Text('value')));
                         }
                       } catch (e) {
                         print(e);

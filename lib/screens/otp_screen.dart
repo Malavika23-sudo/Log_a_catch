@@ -9,9 +9,10 @@ import 'package:email_auth/email_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class OtpScreen extends StatefulWidget {
+  OtpScreen({Key? key, this.email, this.password}) : super(key: key);
+
   String? email;
   String? password;
-  OtpScreen({this.email, this.password});
   @override
   State<OtpScreen> createState() => _OtpScreenState();
 }
@@ -19,10 +20,10 @@ class OtpScreen extends StatefulWidget {
 class _OtpScreenState extends State<OtpScreen> {
   bool sight = true;
   String? otp;
+  bool showSpinner = false;
   final _auth = FirebaseAuth.instance;
   EmailAuth emailAuth = new EmailAuth(sessionName: "Sample session");
   final _formKey = GlobalKey<FormState>();
-  bool showSpinner = false;
 
   void initState() {
     super.initState();
@@ -144,45 +145,51 @@ class _OtpScreenState extends State<OtpScreen> {
                           showSpinner = true;
                         });
                       }
-                      try {
-                        final newUser =
-                            await _auth.createUserWithEmailAndPassword(
-                                email: widget.email.toString(),
-                                password: widget.password.toString());
-                        setState(() {
-                          showSpinner = false;
-                        });
-                        if (newUser != null) {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomeScreen()));
-                        } else {}
-                      } catch (e) {
-                        print('e: $e');
-                      }
-
                       // try {
-                      //   var res = varifyOtp();
-                      //   print('Response $res');
-                      // if (res) {
                       //   final newUser =
                       //       await _auth.createUserWithEmailAndPassword(
                       //           email: widget.email.toString(),
                       //           password: widget.password.toString());
+                      //   setState(() {
+                      //     showSpinner = false;
+                      //   });
                       //   if (newUser != null) {
                       //     Navigator.push(
                       //         context,
                       //         MaterialPageRoute(
-                      //             builder: (context) => EmailLogin()));
+                      //             builder: (context) => HomeScreen()));
                       //   }
-                      //   print('Otp varified');
-                      // } else {
-                      //   print('Not varified');
+                      // } catch (e) {
+                      //   print('e: $e');
                       // }
-                      //   } catch (e) {
-                      //     print(e);
-                      //   }
+
+                      try {
+                        var res = varifyOtp();
+                        print('=================Response=============> $res');
+                        if (res) {
+                          final newUser =
+                              await _auth.createUserWithEmailAndPassword(
+                                  email: widget.email.toString(),
+                                  password: widget.password.toString());
+                          setState(() {
+                            showSpinner = false;
+                          });
+                          if (newUser != null) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomeScreen()));
+                          }
+                          print('=======================Otp varified===================');
+                        } else {
+                          setState(() {
+                            showSpinner = false;
+                          });
+                          print('Not varified');
+                        }
+                      } catch (e) {
+                        print(e);
+                      }
                     },
                   ),
                   SizedBox(

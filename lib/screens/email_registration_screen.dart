@@ -97,10 +97,13 @@ class _EmailSignUpState extends State<EmailSignUp> {
                 ),
                 LoginTextField(
                   onValidate: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter Password';
+                    if (value == null) {
+                      return "Password can't be empty";
+                    } else if (value.length < 6) {
+                      return "password should be atleast 6 characters";
+                    } else if (value.length > 15) {
+                      return "password should not be more than 15 characters";
                     }
-                    return null;
                   },
                   onChanged: (value) {
                     setState(() {
@@ -112,13 +115,16 @@ class _EmailSignUpState extends State<EmailSignUp> {
                 ),
                 LoginTextField(
                   onValidate: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter Password';
+                    if (value == null) {
+                      return "Password can't be empty";
+                    } else if (value.length < 6) {
+                      return "password should be atleast 6 characters";
+                    } else if (value.length > 15) {
+                      return "password should not be more than 15 characters";
                     }
                     if (password != rePassword) {
                       return 'MISMATCH FOUND IN PASSWORDS, PLEASE CHECK ';
                     }
-                    return null;
                   },
                   onChanged: (value) {
                     setState(() {
@@ -133,13 +139,14 @@ class _EmailSignUpState extends State<EmailSignUp> {
                 RoundButton(
                   buttonTitle: 'Register',
                   onPress: () {
-                    if (_formKey.currentState!.validate()) {}
-                    if (password != null && (password == rePassword)) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  OtpScreen(email: email, password: password)));
+                    if (_formKey.currentState!.validate()) {
+                      if (password != null && (password == rePassword)) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => OtpScreen(
+                                    email: email, password: password)));
+                      }
                     }
                   },
                 ),
